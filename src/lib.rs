@@ -1,4 +1,4 @@
-#![feature(new_uninit)]
+#![feature(new_zeroed_alloc)]
 use heapless::String as HeaplessString;
 use once_cell::sync::OnceCell;
 use spin::Mutex;
@@ -106,7 +106,7 @@ impl<const STACK_SIZE: usize> LeakTracer<STACK_SIZE> {
             return ptr;
         };
         let mut vs = [0usize; STACK_SIZE];
-        let l = if cfg!(os = "windows") {
+        let l = if cfg!(target_os = "windows") {
             Some(locker.lock())
         } else {
             None
